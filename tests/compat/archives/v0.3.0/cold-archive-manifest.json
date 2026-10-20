@@ -1,0 +1,159 @@
+{
+ "format": "cold-archive-manifest",
+ "format_version": 1,
+ "tool": "Cold Archive",
+ "tool_version": "0.3.0",
+ "created": "2026-10-20T01:51:15Z",
+ "updated": "2026-10-20T01:51:15Z",
+ "label": "Compatibility fixture",
+ "media": "hdd",
+ "redundancy_percent": 10,
+ "file_count": 11,
+ "total_bytes": 247440,
+ "notes": [],
+ "files": {
+  "2021/2021-12-01/IMG_0001.CR3": {
+   "size": 48000,
+   "mtime": 1792461075.6916287,
+   "sha256": "ee023ba8a710dcdf6184d102b84b8abf8d7e595939117298101e85a290d5bb99",
+   "md5": "73f6009939b105686cd3c83f1b335339"
+  },
+  "2021/2021-12-01/IMG_0001.xmp": {
+   "size": 2300,
+   "mtime": 1792461075.6917243,
+   "sha256": "582e35b2fdccb1873d748044ed49fa6587ef8a3f601926c20d121260183407ea",
+   "md5": "5a77a07ca48d4ec3eba70dfb8f805ff1"
+  },
+  "2021/2021-12-01/IMG_0002.CR3": {
+   "size": 52000,
+   "mtime": 1792461075.6919165,
+   "sha256": "67dabce4e82e16ba63221b85ad235971912efff5806e1f39520a09d0be4577d1",
+   "md5": "623acd531e0047f69fa1fda490da408d"
+  },
+  "2022/2022-04-27/DSC_1040.ARW": {
+   "size": 61000,
+   "mtime": 1792461075.6922038,
+   "sha256": "081570181cb12b59691357792153d6bc176068fe2d3e1c80febbe3c56060d934",
+   "md5": "f82b0405abf9a3bc2fc6df619960fc56"
+  },
+  "2022/2022-04-27/DSC_1040.xmp": {
+   "size": 2100,
+   "mtime": 1792461075.6922889,
+   "sha256": "d51de2a26c48bfd78f90a8444bfd4c0bbc12a3f880b037cd5dd130f9fe0c59b3",
+   "md5": "cbe5aa3061e8d63c6cb06e16e0571a39"
+  },
+  "2022/2022-04-27/DSC_1041.JPG": {
+   "size": 23500,
+   "mtime": 1792461075.6924162,
+   "sha256": "4b86857a5536a7adb6150d857513a6dd1958166bb0853a12944753e527065bbd",
+   "md5": "0ca5b40efc409c3f843b228ae3b5a265"
+  },
+  "2022/2022-04-27/edits/DSC_1040-Edit.tif": {
+   "size": 37000,
+   "mtime": 1792461075.6926255,
+   "sha256": "54290cd7419574066e83e6e238e3bd1a92bafc769154787257933a340d73266a",
+   "md5": "e8f2c938cf4eb1d0a7d1e8b80c419a90"
+  },
+  "Curated/best of 2022.jpg": {
+   "size": 19000,
+   "mtime": 1792461075.692791,
+   "sha256": "f71e6c0425205cf845f5330b91a3bb04ac0be81c92356dd0e0d78ce6a11d1b23",
+   "md5": "6549fd2536572da52fd05e5d56fd58ae"
+  },
+  "Letters/Café menu.txt": {
+   "size": 1960,
+   "mtime": 1792461075.6929457,
+   "sha256": "bd8adfb029aa60143a9b54ac530747e8a0d59bc8c4f4b826f456a4fe44c8dd65",
+   "md5": "d6d4c4cfbc394461e091e028e8f8517a"
+  },
+  "Letters/empty.txt": {
+   "size": 0,
+   "mtime": 1792461075.6930668,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "md5": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "Letters/note to self.txt": {
+   "size": 580,
+   "mtime": 1792461075.693026,
+   "sha256": "34a15f37c0de971ab2334ee9e11b1aeeb36966425ee1858bd1685d777a57e17a",
+   "md5": "2410ecb20794de32c4bf46c977a4dac2"
+  }
+ },
+ "parity_files": {
+  "2021/2021-12-01/PARITY.par2": {
+   "size": 924,
+   "mtime": 1792461075.8638115,
+   "sha256": "afa882159db2d25b8c48be6fd7f62a628fe13f289395f973fe44ba61f77d1ab4"
+  },
+  "2021/2021-12-01/PARITY.vol0+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.8633842,
+   "sha256": "a5bc251d17d0dd94994e1f9e09cf0ce529448d99ce92e82243e746b9b62c0f57"
+  },
+  "2021/2021-12-01/PARITY.vol1+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.863468,
+   "sha256": "07927496c5916d5f740bc33628706408bac14fe653645907fc1d6995207dfb12"
+  },
+  "2021/2021-12-01/PARITY.vol2+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.8637826,
+   "sha256": "142f15ae39dd26fd3eed64344cbc4b461bb0ece2a659c493ae499e42740ebaf8"
+  },
+  "2022/2022-04-27/PARITY.par2": {
+   "size": 924,
+   "mtime": 1792461075.8659198,
+   "sha256": "f4d3674f5d62affc152a61990f25210e59264b0a31655f3d0a7ab47509a3debd"
+  },
+  "2022/2022-04-27/PARITY.vol0+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.8648283,
+   "sha256": "b5404eec38284a6f8b815e00d0e15345b59792d78ef31edb27b2b0e4681e8183"
+  },
+  "2022/2022-04-27/PARITY.vol1+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.864863,
+   "sha256": "84e50772ae730aa3bf92977282873635d93f666e1fdb2df51d5e514e19cb0070"
+  },
+  "2022/2022-04-27/PARITY.vol2+1.par2": {
+   "size": 66528,
+   "mtime": 1792461075.865899,
+   "sha256": "5be9eddaaa3fe2927f53c5d7c7785ac027d1ff70d9d834adf06662191ac99e79"
+  },
+  "2022/2022-04-27/edits/PARITY.par2": {
+   "size": 436,
+   "mtime": 1792461075.880073,
+   "sha256": "51ba42e478b8b1b320627273d42ceb97740f2fe1954013a8f090cb20b53541d6"
+  },
+  "2022/2022-04-27/edits/PARITY.vol0+1.par2": {
+   "size": 66040,
+   "mtime": 1792461075.8800492,
+   "sha256": "95cb517658108d08a19abcdb200431719df5baefc9c2bf6bedf87c41a3f46c0c"
+  },
+  "Curated/PARITY.par2": {
+   "size": 432,
+   "mtime": 1792461075.882923,
+   "sha256": "37aabae439eb5df551b0f0e522fb62f8401195e646c7aee53dee7bf59b1811d6"
+  },
+  "Curated/PARITY.vol0+1.par2": {
+   "size": 66036,
+   "mtime": 1792461075.8825734,
+   "sha256": "5dde14d94f0f4bdc78c87c05de5cbf01a7f19fd8c5c405e65a28212d3c2bc6c6"
+  },
+  "Letters/PARITY.par2": {
+   "size": 684,
+   "mtime": 1792461075.8943675,
+   "sha256": "335ede78da03c69404fc8fbe096f66358e4b362dfa70d5ff8b00ad4e07e0651f"
+  },
+  "Letters/PARITY.vol0+1.par2": {
+   "size": 66288,
+   "mtime": 1792461075.894307,
+   "sha256": "aadf1f7c3d82e2f780136ed4725992ddb99f86f4e533ef9e0e5b8cfdb35685a2"
+  },
+  "Letters/PARITY.vol1+1.par2": {
+   "size": 66288,
+   "mtime": 1792461075.8943477,
+   "sha256": "4e80440e5c5132d6929aea1421283328e15b80ca747ae0773d63ce1a2bca6941"
+  }
+ }
+}

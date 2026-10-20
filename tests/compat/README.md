@@ -13,6 +13,7 @@ not the fixture.
 |---|---|---|---|---|
 | `archives/v0.2.1` | Cold Archive 0.2.1 (the release the first Shoebox drives were made with), from its DMG | par2cmdline 1.3.0 (bundled `par2-fast`) | 2026-10-19 | `make_fixture.py`, then `protect --no-tools --label "Compatibility fixture" --media hdd` |
 | `archives/v0.2.2` | Cold Archive 0.2.2, the installed app | par2cmdline 1.3.0 (bundled `par2-fast`) | 2026-10-19 | same |
+| `archives/v0.3.0` | Cold Archive 0.3.0, from the published DMG (github.com/wwward/cold-archive, release v0.3.0) | par2cmdline 1.4.0 (bundled `par2-fast`) | 2026-10-20 | same |
 
 Add one for every release, made with that release's own app (see
 `make_fixture.py`), never with a development checkout. Never regenerate or
