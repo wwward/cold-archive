@@ -148,3 +148,27 @@ def test_find_archives_on_connected_drives(tmp_path):
     assert found == [str(vols / "Backup" / "Family Archive"), str(vols / "Shoebox")]
     assert volumes.describe(found[0], str(vols)) == "Backup / Family Archive"
     assert volumes.find_archives(str(tmp_path / "nowhere")) == []
+
+
+@needs_par2
+def test_check_writes_nothing_into_the_archive(tmp_path):
+    """Found 2026-10-19 on a real archive: Check took its shared lock by
+    creating .cold-archive.lock in the archive's top folder and left it there,
+    changing the folder's date. A check must change nothing; it now locks
+    only a lock file a writer has already made."""
+    arc = tmp_path / "arc"
+    _archive(arc)
+    root_before = (sorted(os.listdir(arc)), os.stat(arc).st_mtime_ns)
+    for mode in ("standard", "parity"):
+        assert verify(str(arc), VerifyOptions(mode=mode)).verdict == "ok"
+    assert (sorted(os.listdir(arc)), os.stat(arc).st_mtime_ns) == root_before
+
+
+def test_a_check_still_waits_out_a_writer(tmp_path):
+    """While Protect or Repair holds the lock, a check must not start."""
+    from cold_archive.engine.lock import ArchiveBusy, ArchiveLock
+    with ArchiveLock(str(tmp_path), exclusive=True):
+        with pytest.raises(ArchiveBusy):
+            with ArchiveLock(str(tmp_path), exclusive=False):
+                pass
+    assert not os.path.exists(tmp_path / ".cold-archive.lock")      # the writer removes its file
