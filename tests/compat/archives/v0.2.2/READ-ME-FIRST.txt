@@ -1,0 +1,135 @@
+READ ME FIRST: how to check and repair this archive
+====================================================
+
+Archive:        Compatibility fixture
+Created:        2026-10-20T00:33:33Z
+Last updated:   2026-10-20T00:33:33Z
+Contents:       11 files, 247.44 KB
+Repair data:    10% of every folder (more for the index files)
+Made with:      Cold Archive 0.2.2
+
+WHAT THIS IS
+------------
+This drive or disc holds ordinary files in ordinary folders. Nothing is
+compressed, encrypted or packed. You can open, copy and use every file
+with no special software at all.
+
+Alongside the files are a few extra files whose only job is to detect
+and undo damage. Please keep them together with the files when you copy
+the archive anywhere:
+
+  SHA256SUMS                   a list of every file with its SHA-256 fingerprint
+  cold-archive-manifest.json   the same list with sizes and dates (JSON)
+  PARITY.par2, PARITY.vol*.par2  repair data, in every folder, for that folder
+  PARITY-2.par2, PARITY-3.par2   more repair data when a folder has thousands of files
+  PARITY-INDEX*.par2             repair data, top folder only, for the files above
+  Check-This-Archive.command   a script that runs the whole check (Mac / Linux)
+  READ-ME-FIRST.txt / .html      this document
+
+The PARITY files of every folder are themselves listed in SHA256SUMS, so
+the check also notices when repair data has been lost or damaged.
+
+IF YOU WERE GIVEN THIS ARCHIVE: use Check (and Repair if needed). Do not
+run Protect on it unless you have changed files on purpose; Protect
+re-records the files as they are now, and will ask before recording any
+file whose contents differ from the records.
+
+HOW TO CHECK THE ARCHIVE
+------------------------
+Do this first, before anything else, and again every year or two.
+
+On a Mac with the Cold Archive app: open the app, choose "Check an archive"
+and pick this folder. That is all.
+
+On a Mac or Linux without the app: double-click Check-This-Archive.command.
+If it will not open (the drive may not carry permission bits): open the
+Terminal app, type   bash   followed by a space, drag the file onto the
+Terminal window, and press Return. It prints OK or FAILED for every file,
+then checks the repair data.
+
+By hand, with standard tools, from inside the top folder of the archive:
+  Mac:      shasum -a 256 -c SHA256SUMS
+  Linux:    sha256sum -c SHA256SUMS
+  Windows:  open PowerShell in this folder and paste this one line:
+            Get-Content SHA256SUMS | ForEach-Object { $h,$f = $_ -split ' \*',2; if ((Get-FileHash -Algorithm SHA256 -LiteralPath $f).Hash -ne $h.ToUpper()) { "FAILED $f" } else { "OK $f" } }
+Every line should say OK. Any FAILED or missing file is damage; go to the
+repair section below. A FAILED line for a PARITY file means the repair
+data itself is damaged: your files are fine, but less damage can be
+repaired from now on, so make a fresh copy from another copy if you have
+one (or run Protect in the Cold Archive app, which rebuilds it).
+Lines in SHA256SUMS that start with a backslash name files containing
+unusual characters; the Mac and Linux tools handle them, PowerShell may not.
+
+HOW TO REPAIR DAMAGED OR MISSING FILES
+--------------------------------------
+1. If the drive or disc itself is failing, first copy the whole archive,
+   including all PARITY files, to a healthy disk and work on the copy.
+
+2. Get a PAR2 program. PAR2 is an open, published file format (Parchive
+   2.0, from 2003) with several independent implementations; any of them
+   can read these files:
+     Mac:      the Cold Archive app (Repair button), or install Homebrew
+               from https://brew.sh and run:  brew install par2
+     Linux:    sudo apt install par2      (Debian, Ubuntu)
+               sudo dnf install par2cmdline (Fedora)
+     Windows:  MultiPar  https://github.com/Yutaka-Sawada/MultiPar
+               or par2cmdline releases (see below)
+     Source:   https://github.com/Parchive/par2cmdline
+               https://parchive.github.io  (the format specification)
+
+3. In each folder that has damaged or missing files, run:
+     par2 repair PARITY.par2
+   If the folder also has PARITY-2.par2, PARITY-3.par2 ..., run the same
+   command for each of them. For the top folder's own records, run:
+     par2 repair PARITY-INDEX.par2
+   If the small PARITY.par2 file itself is missing, name any of the
+   PARITY.vol...par2 files instead; each of them carries what par2 needs.
+   With MultiPar, double-click the PARITY.par2 file and press Repair.
+
+4. The program rebuilds the damaged or missing files in place. It keeps
+   each damaged original next to the repaired file with ".1" added to the
+   name; delete those once the check passes. (The Cold Archive app's Repair
+   does all of this, restores file dates, and keeps a file's current
+   version if it looks like it was changed on purpose.)
+
+5. Run the check again. It should now report every file OK.
+
+WHAT REPAIR CAN AND CANNOT DO
+-----------------------------
+Each folder's PARITY files can rebuild up to about 10% of that folder's
+data, in any pattern: scattered bad sectors, a few whole files, or a file
+that is missing altogether. They cannot rebuild more than that, and they
+cannot bring back a folder that is entirely gone. That is why more than
+one copy of this archive should exist.
+
+The PARITY files protect each other: if some of them are damaged, repair
+still works with the rest. If every PARITY file of a folder is lost, the
+files in it can still be checked with SHA256SUMS, but not repaired.
+Files of zero bytes have no repair data (there is nothing to rebuild);
+they are still listed in SHA256SUMS.
+
+KEEPING THIS ARCHIVE ALIVE
+--------------------------
+Hard disk: power it up and run the check at least once a year; copy the archive to a new drive after about five years, or sooner if the check ever reports damage. Store it in a padded, anti-static bag, away from magnets, heat and damp.
+
+Keep at least two copies in different places. A copy is only known to
+be good while it passes the check. When you copy the archive to new media,
+copy everything (including the PARITY and SHA256SUMS files) and run the
+check on the copy before trusting it. Repair anything that fails, then
+move on to fresh media well before the old one reaches the end of its life.
+
+FOR THE TECHNICALLY MINDED
+--------------------------
+SHA256SUMS: one line per file: 64 hexadecimal characters, a space, an
+asterisk, then the path relative to the top folder using forward slashes,
+spelled exactly as the file is named on the disk (no Unicode normalisation;
+names with a newline or backslash use the GNU coreutils escape form). Any
+sha256sum-compatible tool reads it. It lists the files, the records, and
+every folder's PARITY files; it cannot list PARITY-INDEX, which is built
+from it. The manifest is JSON: "files" maps each path to its size in bytes,
+mtime in seconds since 1970 (UTC), sha256 and md5 (PAR2 identifies files by
+MD5); "parity_files" does the same for the PARITY files. PAR2 sets were
+created with par2cmdline, one set per folder (split when a folder has more
+than a few thousand files), with a block size chosen per folder and uniform
+recovery volumes. Names containing a backslash or a control character
+cannot be stored by par2cmdline; such files are listed in SHA256SUMS only.

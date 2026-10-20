@@ -1,0 +1,33 @@
+[project]
+name = "cold-archive"
+version = "0.3.0"
+description = "Comprehensive cold-storage lifecycle management suite"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11"
+dependencies = [
+    # <6.12: the PySide6 6.12.0 wheels carry LC_BUILD_VERSION minos 26.0, which
+    # raises the app's LSMinimumSystemVersion to macOS 26 (measured 2026-10-19);
+    # 6.11.2 is minos 15.0, the accepted floor. build_app.sh refuses a
+    # bundle whose floor rises above APP_MAX_FLOOR.
+    "PySide6>=6.5.0,<6.12",
+]
+
+[project.scripts]
+cold-archive = "cold_archive.gui.app:main"
+cold-archive-cli = "cold_archive.engine.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyinstaller>=6.10"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[build-system]
+requires = ["setuptools>=77"]   # 77 reads the SPDX `license` and `license-files` fields (PEP 639)
+build-backend = "setuptools.build_meta"
