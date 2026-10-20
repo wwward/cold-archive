@@ -54,15 +54,24 @@ given build are recorded in `BUILD-VERSIONS.txt` inside the app.
   choice of licences, as FreeType and D-Bus do, the permissive choice is the
   one used.
 
-## Source code offer
+## Where the source code is
 
-The source of par2cmdline ships inside the app. For the other GPL and LGPL
-components (Qt, PySide6, shiboken6, the PyInstaller bootloader), the
-addresses above lead to the exact releases used. In addition, for three
-years after each Cold Archive release, the maintainers will give anyone who
-asks a complete copy of the corresponding source code for those components,
-for no more than the cost of providing it. Ask through the issue tracker at
-https://github.com/wwward/cold-archive/issues.
+The complete source of every GPL and LGPL component travels with the app
+itself, so nothing has to be requested:
+
+- **par2cmdline:** inside the app (`Contents/Resources/resources/`), and in
+  the TOOLS folder of every archive the app makes.
+- **Qt, PySide6 and shiboken6:** the exact source archives the bundled
+  libraries come from are attached to every Cold Archive release, next to
+  `Cold_Archive.dmg`, at https://github.com/wwward/cold-archive/releases,
+  with `SOURCES.txt` describing them and giving their SHA-256. They are
+  gathered and checked by `packaging/release_sources.py`.
+- **The PyInstaller bootloader:** its licence exception allows it to be
+  distributed inside the app without its source; it is at the address in
+  the table.
+
+If you received Cold Archive from somewhere else, the release page above has
+the same files for every version.
 
 ## Acknowledgements
 

@@ -100,6 +100,13 @@ retry in a loop: repeated failures can lock the Apple ID. A 403 saying an
 agreement is missing or expired means the developer agreement needs
 accepting at developer.apple.com, not a new password.
 
+To publish a release, attach `release/Cold_Archive.dmg` and everything in
+`release/sources/` to it: `.venv/bin/python packaging/release_sources.py`
+fetches and checks the exact Qt, PySide6 and par2cmdline sources the app was
+built from. The app's GPL and LGPL parts may only be distributed with their
+source alongside, and this is how every release meets that, with no promise
+to send anything later.
+
 To use the command line from the installed app:
 
 ```
