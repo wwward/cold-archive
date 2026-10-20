@@ -81,3 +81,14 @@ def rot(path: str, offset: int = 12345, length: int = 300) -> None:
         f.seek(offset)
         f.write(bytes(b ^ 0xFF for b in old))
     os.utime(path, ns=(st.st_atime_ns, st.st_mtime_ns))
+
+
+def edit(path, data: bytes, seconds_later: float = 10.0) -> None:
+    """Write new bytes the way a person's edit does: the date moves on. An
+    edit that kept the size and landed within DATE_SLACK (2 s) of the recorded
+    date would be indistinguishable from rot, by design (layout.same_date)."""
+    import os as _os
+    t = _os.stat(path).st_mtime
+    with open(path, "wb") as f:
+        f.write(data)
+    _os.utime(path, (t + seconds_later, t + seconds_later))

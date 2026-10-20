@@ -19,7 +19,7 @@ from cold_archive.engine.repair import RepairOptions, repair
 from cold_archive.engine.scan import scan_archive
 from cold_archive.engine.verify import VerifyOptions, verify
 
-from conftest import make_tree, needs_par2, rot
+from conftest import edit, make_tree, needs_par2, rot
 
 
 # ---------------------------------------------------------------- pure units
@@ -262,7 +262,7 @@ def test_same_size_edit_is_seen_by_content(tmp_path):
     p = tmp_path / "Docs" / "letter.txt"
     data = bytearray(p.read_bytes())
     data[0] ^= 0xFF
-    p.write_bytes(bytes(data))                 # same size, new mtime: a normal edit
+    edit(p, bytes(data))                       # same size, new mtime: a normal edit
     assert protect(str(tmp_path)).needs_consent == "changes"
     r = protect(str(tmp_path), ProtectOptions(accept_changes=True))
     assert r.ok and r.files_updated == ["Docs/letter.txt"], r.summary()
@@ -272,9 +272,9 @@ def test_same_size_edit_is_seen_by_content(tmp_path):
     # replace the Docs index with an old one is hard, so instead rebuild parity
     # for Docs from a different content and restore the records' content
     old_bytes = p.read_bytes()
-    p.write_bytes(bytes(data[::-1]))
+    edit(p, bytes(data[::-1]))
     assert protect(str(tmp_path), ProtectOptions(accept_changes=True)).ok
-    p.write_bytes(old_bytes)
+    edit(p, old_bytes)
     assert protect(str(tmp_path), ProtectOptions(accept_changes=True)).ok   # records now match old_bytes again
     st = p.stat()
     # the set was rebuilt for old_bytes; the state check must call it current

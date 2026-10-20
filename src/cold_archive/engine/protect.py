@@ -62,7 +62,7 @@ from . import par2 as p2
 from .hashing import Digests, digest_file, hash_many, sha256_file
 import dataclasses
 
-from .layout import (INDEX_PARITY_BASENAME, MANIFEST_FILE, ROOT_TOOL_FILES, SUMS_FILE, human_bytes,
+from .layout import (INDEX_PARITY_BASENAME, same_date, MANIFEST_FILE, ROOT_TOOL_FILES, SUMS_FILE, human_bytes,
                      is_our_parity_path, name_problem, nfc, parity_set_of, payload_set_name)
 from .manifest import (FileEntry, Manifest, ManifestError, ManifestTooNew, load_manifest, now_iso,
                        read_sums, save_manifest, sums_content, write_if_changed)
@@ -421,7 +421,7 @@ def _protect_locked(root: str, opts: ProtectOptions, obs: Observer, known_hashes
             res.bytes_hashed += f.size
             continue
         e = old_files.get(effective_rel)
-        if (e is not None and not opts.full_rehash and e.size == f.size and e.mtime == f.mtime
+        if (e is not None and not opts.full_rehash and e.size == f.size and same_date(e.mtime, f.mtime)
                 and e.sha256 and e.md5):
             reuse[effective_rel] = Digests(e.sha256, e.md5)
         else:
@@ -503,7 +503,7 @@ def _protect_locked(root: str, opts: ProtectOptions, obs: Observer, known_hashes
                         continue
                 added.add(effective_rel)
         elif e.sha256 != dg.sha256:
-            if (e.size == f.size and e.mtime == f.mtime) or e.size < 0:
+            if (e.size == f.size and same_date(e.mtime, f.mtime)) or e.size < 0:
                 # Same size, same modification time, different bytes: this is
                 # exactly what bit-rot looks like. (Records taken from
                 # SHA256SUMS carry no size or date: any difference is treated
@@ -629,7 +629,7 @@ def write_records(root: str, manifest: Manifest, scan: ScanResult, old: Optional
                     continue
                 stat_of[rel] = (int(st.st_size), float(st.st_mtime))
                 e = old_parity.get(rel)
-                if e is not None and e.size == st.st_size and e.mtime == float(st.st_mtime) and e.sha256:
+                if e is not None and e.size == st.st_size and same_date(e.mtime, st.st_mtime) and e.sha256:
                     parity_entries[rel] = e
                 else:
                     to_hash.append((rel, os.path.join(sd.abspath, n), int(st.st_size)))

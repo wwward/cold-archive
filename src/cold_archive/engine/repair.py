@@ -38,7 +38,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from . import par2 as p2
 from .hashing import sha256_file
-from .layout import INDEX_PARITY_BASENAME, MANIFEST_FILE, ROOT_TOOL_FILES, SUMS_FILE, human_bytes, name_problem, nfc, remove_any_spelling, replace_any_spelling
+from .layout import INDEX_PARITY_BASENAME, MANIFEST_FILE, ROOT_TOOL_FILES, SUMS_FILE, human_bytes, name_problem, nfc, remove_any_spelling, replace_any_spelling, same_date
 from .manifest import Manifest, ManifestError, load_manifest, read_sums
 from .lock import ArchiveLock
 from .observer import NullObserver, Observer
@@ -341,7 +341,7 @@ def _repair_locked(root: str, opts: RepairOptions, obs: Observer, exe: str) -> R
             except OSError:
                 rot.append(raw)
                 continue
-            if e is not None and e.size == stt.st_size and e.mtime == float(stt.st_mtime):
+            if e is not None and e.size == stt.st_size and same_date(e.mtime, stt.st_mtime):
                 rot.append(raw)
             else:
                 # a different date or size, or no manifest to compare with:

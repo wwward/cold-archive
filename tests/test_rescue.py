@@ -172,3 +172,52 @@ def test_a_check_still_waits_out_a_writer(tmp_path):
             with ArchiveLock(str(tmp_path), exclusive=False):
                 pass
     assert not os.path.exists(tmp_path / ".cold-archive.lock")      # the writer removes its file
+
+
+def _round_dates(root, step=0.37):
+    """What a copy onto exFAT (10 ms) or FAT32 (2 s) does to file dates."""
+    for dp, dns, fns in os.walk(root):
+        for n in fns:
+            p = os.path.join(dp, n)
+            t = os.stat(p).st_mtime
+            os.utime(p, (t - step, t - step))
+
+
+@needs_par2
+def test_rot_on_a_drive_that_rounds_dates_is_repaired_not_mistaken_for_an_edit(tmp_path):
+    """Found 2026-10-19 in the clean-Mac test: Repair compared dates exactly,
+    so on a drive that stores them coarser than the records (exFAT, FAT32)
+    damage looked like an edit: the good file was restored, but the result
+    said 'needs attention' and the damaged bytes stayed beside it as .1."""
+    arc = tmp_path / "arc"
+    files = _archive(arc)
+    _round_dates(arc)
+    p = arc / "letters" / "f3.bin"
+    st = os.stat(p)
+    with open(p, "r+b") as f:
+        f.seek(5000)
+        f.write(b"\0" * 3000)
+    os.utime(p, ns=(st.st_atime_ns, st.st_mtime_ns))
+    r = repair(str(arc), RepairOptions())
+    assert r.verdict == "ok", r.summary()
+    assert p.read_bytes() == files["letters/f3.bin"]
+    assert not list(arc.rglob("*.1"))
+    assert verify(str(arc), VerifyOptions(mode="standard")).verdict == "ok"
+
+
+@needs_par2
+def test_protect_on_a_drive_that_rounds_dates_refuses_rot_instead_of_asking(tmp_path):
+    """On such a drive Protect took rot for a possible edit and asked whether
+    it was on purpose; a yes would have recorded the damage as the truth."""
+    arc = tmp_path / "arc"
+    _archive(arc)
+    _round_dates(arc)
+    p = arc / "photos" / "f1.bin"
+    st = os.stat(p)
+    with open(p, "r+b") as f:
+        f.seek(9000)
+        f.write(b"\0" * 2000)
+    os.utime(p, ns=(st.st_atime_ns, st.st_mtime_ns))
+    res = protect(str(arc), ProtectOptions(full_rehash=True))
+    assert not res.needs_consent, res.summary()
+    assert "photos/f1.bin" in res.rot_suspected, res.summary()

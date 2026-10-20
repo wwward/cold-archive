@@ -63,6 +63,20 @@ TOOLS_TMP_SUFFIX = ".cold-archive-tmp"
 TMP_SUFFIX = ".coldarchive-partial"
 # Advisory lock held by a running job; ignored by the scanner.
 LOCK_FILE = ".cold-archive.lock"
+
+# A recorded date and the date on disk count as the same within this many
+# seconds. FAT32 keeps dates to 2 s and exFAT to 10 ms, so a copy onto such a
+# drive moves every date a little. MEASURED 2026-10-19: with an exact
+# comparison, Repair on such a copy took damage for an edit (kept the damaged
+# bytes as .1 and said "needs attention"), and Protect asked whether a rotted
+# file was changed on purpose, where a yes would record the damage. An edit
+# that keeps the size and lands within 2 s of the recorded date is the only
+# thing this lets through, and Check, which reads every byte, still finds it.
+DATE_SLACK = 2.0
+
+
+def same_date(a: float, b: float) -> bool:
+    return abs(float(a) - float(b)) < DATE_SLACK
 # New parity is built inside a hidden folder with this prefix and only moved
 # into place once par2 has finished, so an interrupted or failed build never
 # leaves a folder without parity.

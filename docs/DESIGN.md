@@ -427,6 +427,13 @@ through the worker thread (offscreen). See `tests/test_review_fixes.py`.
   Apple refuses submissions with a 403 whenever its developer agreement
   needs accepting again; that is the Account Holder's click, not a
   credential problem.
+* Recorded dates and dates on disk are compared with 2 seconds of slack
+  (`layout.same_date`). FAT32 keeps dates to 2 s and exFAT to 10 ms, so any
+  copy onto such a drive moves every date a little; with an exact comparison
+  (until 0.3.0) Repair took damage there for an edit and Protect asked
+  whether rot was intentional. The price: an edit that keeps the file's size
+  and lands within 2 s of its recorded date looks like rot to Protect and
+  Repair. Check, which reads every byte, still reports it.
 * Symlinks are skipped, not archived.
 * Extended attributes and ACLs are not preserved (an archive is plain files).
 * A case-sensitive source (case-sensitive HFS+ or APFS, Linux) can hold two

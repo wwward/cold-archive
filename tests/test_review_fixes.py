@@ -21,7 +21,7 @@ from cold_archive.engine.protect import ProtectOptions, protect
 from cold_archive.engine.repair import repair
 from cold_archive.engine.verify import VerifyOptions, verify
 
-from conftest import make_tree, needs_par2, rot
+from conftest import edit, make_tree, needs_par2, rot
 
 
 def _vols(d):
@@ -38,7 +38,7 @@ def test_changed_files_need_consent_and_nothing_is_touched(tmp_path):
     idx = (tmp_path / "Docs" / "PARITY.par2").read_bytes()
     # a copy through exFAT or rsync changes dates; corruption on the way changes bytes
     p = tmp_path / "Docs" / "letter.txt"
-    p.write_bytes(files["Docs/letter.txt"][:-40] + b"X" * 40)
+    edit(p, files["Docs/letter.txt"][:-40] + b"X" * 40)
     r = protect(str(tmp_path))
     assert r.needs_consent == "changes" and r.files_updated == ["Docs/letter.txt"] and not r.ok
     assert {n: (tmp_path / n).read_bytes() for n in snap} == snap             # records untouched
@@ -49,7 +49,7 @@ def test_changed_files_need_consent_and_nothing_is_touched(tmp_path):
     rr = repair(str(tmp_path))
     assert p.read_bytes() == files["Docs/letter.txt"] and "Docs/letter.txt" in rr.repaired
     # the other path: the person says it was them
-    p.write_bytes(files["Docs/letter.txt"][:-40] + b"Y" * 40)
+    edit(p, files["Docs/letter.txt"][:-40] + b"Y" * 40)
     r = protect(str(tmp_path), ProtectOptions(accept_changes=True))
     assert r.ok and r.files_updated == ["Docs/letter.txt"], r.summary()
     assert verify(str(tmp_path), VerifyOptions(mode="thorough")).verdict == "ok"
